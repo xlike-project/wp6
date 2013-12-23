@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema" >
+  
+  <xs:element name="item" type="item" />
+
+  <!-- Element 'item' contains information about a news item. -->  
+  <!--     sentences : analyzed sentences of the item.        -->
+  <!--     nodes : nodes of the semantic graph.               -->  
+  <!--     frames : frames of the semantic graph.             -->  
+  <!--     conll : analyzer output in CoNLL format.           -->  
+  <xs:complexType name="item">
+    <xs:sequence>
+      <xs:element name="services" type="serviceList" minOccurs="0" maxOccurs="1" />
+      <xs:element name="sentences" type="sentenceList" minOccurs="0" maxOccurs="1" />
+      <xs:element name="nodes" type="nodeList" minOccurs="0" maxOccurs="1" />
+      <xs:element name="frames" type="frameList" minOccurs="0" maxOccurs="1" />
+      <xs:element name="conll" minOccurs="0" maxOccurs="1" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  
+  <!-- List of services used to process the item.-->
+  <xs:complexType name="serviceList">
+	<xs:sequence>
+	   <xs:element name="service" type="service" minOccurs="0" maxOccurs="unbounded" />
+	</xs:sequence>
+  </xs:complexType>
+
+  <!-- Service applied to processs the item     -->
+  <!-- name : name of the executed service      -->
+  <!-- date : when the service was execute      -->
+  <!-- duration: how long the execution takes   -->
+  <xs:complexType name="service">
+    <xs:attribute name="name" type="xs:string"/>
+    <xs:attribute name="date" type="xs:date"/>
+	<xs:attribute name="duration" type="xs:duration" />
+  </xs:complexType>
+
+  <!-- List of sentences in the item.-->
+  <xs:complexType name="sentenceList">
+	<xs:sequence>
+		<xs:element name="sentence" type="sentence" minOccurs="0" maxOccurs="unbounded" />
+	</xs:sequence>
+  </xs:complexType>
+
+  <!-- Linguistic analysis for a sentence.-->
+  <!--     id : sentence id (numbered from 1 for each news item).        -->
+  <!--     text : original text of the sentence.                         -->
+  <!--     tokens : list of tokens in the sentence.                      -->
+  <xs:complexType name="sentence">
+    <xs:sequence>      
+      <xs:element name="text" />
+      <xs:element name="tokens" type="tokenList" minOccurs="0" maxOccurs="1" />
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string"/>
+  </xs:complexType>
+
+  <!-- List of tokens in a sentence -->
+  <xs:complexType name="tokenList">
+	  <xs:sequence>
+		<xs:element name="token" type="token" minOccurs="0" maxOccurs="unbounded" />
+	  </xs:sequence>
+  </xs:complexType>
+  
+  <!-- linguistic information for a token -->
+  <!--     id : token id. Numbered from 1 for each sentence.         -->
+  <!--          e.g. token 3 of sentence 2 has id="2.3".             -->
+  <!--     pos : token Part of Speech tag.                           -->
+  <!--     lemma : token lemma.                                      -->
+  <!--     start : token start character position in original text.  -->
+  <!--     end   : token end character position in original text.    -->
+  <xs:complexType name="token" mixed="true">
+    <xs:attribute name="id" type="xs:string" />
+    <xs:attribute name="pos" type="xs:string" />
+    <xs:attribute name="lemma" type="xs:string" />
+    <xs:attribute name="start" type="xs:int" />
+    <xs:attribute name="end" type="xs:int" />
+  </xs:complexType>
+
+  <!-- List of nodes in the item -->
+  <xs:complexType name="nodeList">
+	  <xs:sequence>
+		<xs:element name="node" type="node" minOccurs="0" maxOccurs="unbounded" />
+	  </xs:sequence>
+  </xs:complexType>
+
+  <!-- List of frames in the item -->
+  <xs:complexType name="frameList">
+	  <xs:sequence>
+		<xs:element name="frame" type="frame" minOccurs="0" maxOccurs="unbounded" />
+	  </xs:sequence>
+  </xs:complexType>
+  
+  <!-- A node of the semantic graph. May correspond to -->
+  <!-- a named entity or to an ordinay noun phrase.    -->
+  <!--     id : Node id.  It is prefixed by "E" for entities and by "W" for words      -->
+  <!--     displayName: string identifying the node to humans (e.g. lemma).            -->
+  <!--     type : "entity" if the node is an entity, or "word" if it is a regular word -->
+  <!--     class : If the node type is "entity", semantic class (person, location..)   -->
+  <!--     lang : language                                                             -->
+  <!--     weight: weight                                                              -->
+  <!--     mentions : list of mentions to this node in the text.                       -->
+  <!--     descriptions : list of ontological descrpintions for this node.             -->
+  <xs:complexType name="node">
+    <xs:sequence>
+      <xs:element name="mentions" type="mentionList" />
+      <xs:element name="descriptions" type="descriptionList" minOccurs="0" maxOccurs="unbounded"  />
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string" />
+    <xs:attribute name="displayName" type="xs:string" />
+    <xs:attribute name="type" type="xs:string" />
+    <xs:attribute name="class" type="xs:string" />
+    <xs:attribute name="lang" type="xs:string" />
+  </xs:complexType>
+
+  <!-- List of mentions of an entity -->
+  <xs:complexType name="mentionList">
+	  <xs:sequence>
+		<xs:element name="mention" type="mention" minOccurs="0" maxOccurs="unbounded" />
+	  </xs:sequence>
+  </xs:complexType>
+
+  <!-- List of ontological description for an entity -->
+  <xs:complexType name="descriptionList">
+  <xs:sequence>
+    <xs:element name="description" type="description" minOccurs="0" maxOccurs="unbounded" />
+  </xs:sequence>
+  </xs:complexType>
+
+  <!-- A mention to one particular named entity -->
+  <!--     mention_token : token id for each word forming this                    -->
+  <!--     id : mention id (entity id + mention number. e.g.: "E1.1", "E1.2" etc) -->
+  <!--     sentenceId : Sentence where the mention occurred.                      -->
+  <!--     words: Surface form of mention as occurred.                            --> 
+  <xs:complexType name="mention"> 
+    <xs:sequence>
+      <xs:element name="mention_token" type="mention_token" minOccurs="1" maxOccurs="unbounded" />
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string"/>
+    <xs:attribute name="sentenceId" type="xs:string"/>
+    <xs:attribute name="words" type="xs:string" />
+  </xs:complexType>
+
+  <!-- A token of a mention of a Named Entity -->
+  <!--     id : token id for the mention token -->
+  <xs:complexType name="mention_token">    
+    <xs:attribute name="id" />
+  </xs:complexType>  
+
+  <!-- Link to one ontology (Wikipedia, WordNet, CYC, ...) for a given node   -->
+  <!--     knowledgeBASE : ontological resource (WN, Wikipedia, etc).         --> 
+  <!--     URI : locator of the resource in the KB                       --> 
+  <!--     displayName: string identifying the node to humans (e.g. lemma).            -->
+  <!--     lang : language                                                    -->
+  <xs:complexType name="description">
+    <xs:attribute name="knowledgeBase" type="xs:string" />
+    <xs:attribute name="URI" type="xs:string" />
+    <xs:attribute name="displayName" type="xs:string" />
+    <xs:attribute name="lang" type="xs:string" />
+    <xs:attribute name="confidence" type="xs:decimal" />
+  </xs:complexType>
+
+  <!-- A frame of the semantic graph. Corresponds to an event                  -->
+  <!--     id : Frame id.  It is prefixed by "F" (e.g. F1, F2, F3...).         -->
+  <!--     tokenId : token id for this mention                                 -->
+  <!--     sentenceId : Sentence where the mention occurred.                   -->
+  <!--     displayName : string identifying the frame to humans (e.g. lemma).    -->
+  <!--     type : If the node is an entity, semantic type (person, location..) -->
+  <!--     argument : arguments of the predicate                               -->
+  <!--     description : ontological descriptions for this frame.              -->
+  <xs:complexType name="frame">
+    <xs:sequence>
+      <xs:element name="argument" type="argument" minOccurs="0" maxOccurs="unbounded" />
+      <xs:element name="descriptions" type="descriptionList" minOccurs="0" maxOccurs="1" />
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string" />
+    <xs:attribute name="tokenId" type="xs:string" />
+    <xs:attribute name="sentenceId" type="xs:string" />
+    <xs:attribute name="displayName" type="xs:string" />
+  </xs:complexType>
+
+  <!-- A frame argument. May refer to a node, or to another frame.             -->
+  <!--     role : Role played by this argument (subject, object, etc).         -->
+  <!--     id : node or frame id of argument playing this role.                -->
+  <!--     displayName: string identifying the argument to humans.             -->
+  <!--     frame : true if the argument is another frame, false otherwise.     -->
+  <!--     description : ontological descriptions for this argument.           -->
+  <xs:complexType name="argument">
+    <xs:sequence>
+      <xs:element name="description" type="description" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+    <xs:attribute name="role" type="xs:string" />
+    <xs:attribute name="id" type="xs:string" />
+    <xs:attribute name="displayName" type="xs:string" />
+    <xs:attribute name="frame" type="xs:boolean" />  
+  </xs:complexType>
+  
+</xs:schema>
