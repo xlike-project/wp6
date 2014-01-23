@@ -1,0 +1,58 @@
+#options
+{
+	width: 45%;
+	float: left;
+	padding-left: 1em;
+}
+
+#programdiv
+{
+	width: 130px; 
+	margin-left: 160px;
+	margin-bottom: 6px;
+}
+
+.checkbox
+{
+	width: 50px;
+}
+
+#programlegendiv
+{
+	width: 300px; 
+	margin-left: 79px;
+	margin-bottom: 6px;
+}
+
+#programlegendiv input
+{
+	width: 60px;
+	height: 16px;
+	border: 0;
+	readonly: readonly;
+}
+
+#programlegendiv span
+{
+	vertical-align: middle;
+}
+
+.node {
+	stroke-width: 1.5px;
+}
+
+.link {
+	stroke: #999;
+	stroke-opacity: .6;
+}
+
+#map
+{
+	left: -2%;
+	width: 36%;
+	border: 1px dashed; 
+	display: inline-block; 
+	FILTER:alpha(opacity=0); 
+	background-color:white;
+	float: left;
+}

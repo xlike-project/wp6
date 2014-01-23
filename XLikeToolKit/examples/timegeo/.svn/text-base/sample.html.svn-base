@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>TimeGeo - Simple example</title>
+	
+	<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAt_fSm9zCSNOzjitnPyLQlbVeoIvffWk8&sensor=false&language=en" type="text/javascript"></script>
+	
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	<script>
+		google.load("visualization", "1", {packages:["corechart"]});
+		google.setOnLoadCallback(drawChart);
+	</script>
+    <script src="../../libs/require.js" type="text/javascript" data-main="main.js"></script>
+	
+</head>
+<body>
+  <div id="timegeo" class="timegeo">
+		<div id="map" class="map"></div>
+		<div class="timetrend">
+			<p>Time Trend</p>
+			<div id="time_chart"></div>
+		</div>
+	</div>
+</body>
+</html>
